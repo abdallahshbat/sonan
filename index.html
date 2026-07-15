@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مسارات الدورة التأهيلية — بوابة طالب العلم</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+
+  :root {
+    --teal: #085041;
+    --teal-light: #0d6b56;
+    --teal-bg: #e8f5f1;
+    --coral: #D85A30;
+    --coral-light: #f4ede8;
+    --gold: #b8860b;
+    --gold-bg: #fdf8e8;
+    --purple: #4a3f8f;
+    --purple-bg: #eeedf8;
+    --gray: #4a4a4a;
+    --gray-bg: #f2f2f2;
+    --border: #ddd;
+    --white: #ffffff;
+    --bg: #f8f9fa;
+    --text: #1a1a1a;
+    --text-light: #555;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: var(--teal);
+    color: white;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 { font-size: 20px; font-weight: 800; }
+  .header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+  .header-logo {
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* Nav tabs */
+  .nav {
+    background: white;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0 24px;
+  }
+  .nav-tab {
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    border: none;
+    background: none;
+    font-family: 'Tajawal', sans-serif;
+  }
+  .nav-tab:hover { color: var(--teal); }
+  .nav-tab.active {
+    color: var(--teal);
+    border-bottom: 3px solid var(--teal);
+  }
+
+  /* Main content */
+  .main { padding: 28px 32px; max-width: 900px; margin: 0 auto; }
+
+  /* Flow container */
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  /* Phase label */
+  .phase-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 18px;
+    background: var(--teal-bg);
+    border-radius: 20px;
+    margin: 16px 0 8px;
+  }
+
+  /* Node */
+  .node {
+    width: 100%;
+    max-width: 520px;
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+    position: relative;
+  }
+  .node:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .node.teal { background: var(--teal-bg); border-color: var(--teal); }
+  .node.coral { background: var(--coral-light); border-color: var(--coral); }
+  .node.purple { background: var(--purple-bg); border-color: var(--purple); }
+  .node.gray { background: var(--gray-bg); border-color: var(--border); cursor: default; }
+  .node.gold { background: var(--gold-bg); border-color: var(--gold); }
+  .node.dashed { border-style: dashed; }
+
+  .node-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .node.teal .node-title { color: var(--teal); }
+  .node.coral .node-title { color: var(--coral); }
+  .node.purple .node-title { color: var(--purple); }
+  .node.gray .node-title { color: var(--gray); }
+  .node.gold .node-title { color: var(--gold); }
+
+  .node-sub {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* Arrow */
+  .arrow {
+    width: 2px;
+    height: 28px;
+    background: var(--border);
+    position: relative;
+    margin: 0 auto;
+  }
+  .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border);
+  }
+
+  /* Decision diamond */
+  .decision {
+    width: 160px;
+    height: 60px;
+    background: white;
+    border: 2px solid var(--gray);
+    transform: rotate(45deg) scale(0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px auto;
+    position: relative;
+    cursor: default;
+  }
+  .decision-text {
+    transform: rotate(-45deg);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* Branch */
+  .branch {
+    display: flex;
+    width: 100%;
+    max-width: 620px;
+    gap: 16px;
+    margin: 4px 0;
+  }
+  .branch-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .branch-label {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+  }
+  .branch-label.yes { background: #e8f5f1; color: var(--teal); }
+  .branch-label.no { background: #fdecea; color: #c0392b; }
+
+  /* Detail panel */
+  .detail-panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .detail-panel.open { display: flex; }
+  .detail-card {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .detail-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--teal);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--teal-bg);
+  }
+  .detail-steps { list-style: none; }
+  .detail-steps li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .detail-steps li:last-child { border-bottom: none; }
+  .step-num {
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-who {
+    font-size: 12px;
+    color: var(--coral);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .step-out {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+  .close-btn {
+    float: left;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 16px;
+    font-family: 'Tajawal', sans-serif;
+  }
+  .close-btn:hover { background: var(--teal-light); }
+
+  /* End node */
+  .end-node {
+    background: var(--teal);
+    color: white;
+    border-radius: 30px;
+    padding: 10px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+  .section-hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>مسارات الدورة التأهيلية</h1>
+    <p>بوابة طالب العلم — جمعية سنن التعليمية</p>
+  </div>
+  <div class="header-logo">1/1-A6</div>
+</div>
+
+<div class="nav">
+  <button class="nav-tab active" onclick="showSection('student')">مسار الطالب</button>
+  <button class="nav-tab" onclick="showSection('registration')">التسجيل والقبول</button>
+  <button class="nav-tab" onclick="showSection('content')">المحتوى</button>
+  <button class="nav-tab" onclick="showSection('lecturer')">المحاضر</button>
+  <button class="nav-tab" onclick="showSection('media')">الإعلام</button>
+  <button class="nav-tab" onclick="showSection('logistics')">اللوجستيات</button>
+</div>
+
+<div class="main">
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#085041"></div> يفعله الطالب / إجراء رئيسي</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div> يصله من الفريق</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div> إجراء إعلامي / تصميم</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#888"></div> قرار / نتيجة</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b8860b"></div> احتمال / مرن</div>
+  </div>
+
+  <!-- ===== مسار الطالب ===== -->
+  <div id="section-student" class="flow">
+    <div class="phase-label">ما قبل الدورة</div>
+
+    <div class="node purple" onclick="openDetail('s1')">
+      <div class="node-title">يصله رابط التسجيل</div>
+      <div class="node-sub">عبر واتساب أو تويتر أو جهة شريكة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('s2')">
+      <div class="node-title">يعبّئ نموذج التسجيل</div>
+      <div class="node-sub">بياناته الشخصية + أسئلة القياس القبلي + حضوري أم عن بعد</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray">
+      <div class="node-title">⬡ هل مقبول؟</div>
+      <div class="node-sub">يراجع أ. عبدالله شباط — فرز حضوري / عن بعد</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('s3')">
+      <div class="node-title">يصله إشعار القبول</div>
+      <div class="node-sub">رسالة موحدة عبر واتساب + إضافة للمجموعة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('s4')">
+      <div class="node-title">يصله جدول الدورة ورابط البث</div>
+      <div class="node-sub">عبر مجموعة واتساب قبل بدء الدورة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">أثناء كل فترة</div>
+
+    <div class="node purple" onclick="openDetail('s5')">
+      <div class="node-title">يصله رابط التحضير</div>
+      <div class="node-sub">باركود على الشاشة (حضوري) أو رابط في القروب (عن بعد)</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('s6')">
+      <div class="node-title">يسجّل حضوره</div>
+      <div class="node-sub">خلال 15 دقيقة بعد انتهاء الفترة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('s7')">
+      <div class="node-title">يجيب على الاختبار البعدي</div>
+      <div class="node-sub">نموذج ورقي (حضوري) أو رابط جوجل (عن بعد) — غير مشترط للشهادة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">بعد انتهاء الدورة</div>
+
+    <div class="node teal" onclick="openDetail('s8')">
+      <div class="node-title">يجيب على استبيان الرضا (اختياري)</div>
+      <div class="node-sub">رابط في مجموعة واتساب</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray">
+      <div class="node-title">⬡ يستحق الشهادة؟</div>
+      <div class="node-sub">حضر 4 فترات أو أكثر — أو حضر 4 + استأذن مرة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('s9')">
+      <div class="node-title">يصله شهادة الحضور إلكترونياً</div>
+      <div class="node-sub">عبر واتساب — شهادة باسمه الكامل</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray">
+      <div class="node-title">يبقى في مجموعة واتساب</div>
+      <div class="node-sub">إعلانات البرامج والدورات القادمة</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="end-node">رحلة الطالب مكتملة ✓</div>
+  </div>
+
+  <!-- ===== مسار التسجيل والقبول ===== -->
+  <div id="section-registration" class="flow section-hidden">
+    <div class="phase-label">إعداد أدوات التسجيل</div>
+
+    <div class="node teal" onclick="openDetail('r1')">
+      <div class="node-title">إعداد نموذج التسجيل ورابطه</div>
+      <div class="node-sub">أ. عبدالله شباط — بيانات الطالب + أسئلة القياس القبلي</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('r2')">
+      <div class="node-title">نشر رابط التسجيل</div>
+      <div class="node-sub">أ. عبدالله شباط — واتساب (إدارة المشاريع) + تويتر (الإعلام)</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">مصادر التسجيل</div>
+
+    <div class="branch">
+      <div class="branch-item">
+        <div class="node purple" style="max-width:100%" onclick="openDetail('r3a')">
+          <div class="node-title">تسجيل مباشر</div>
+          <div class="node-sub">الطالب يعبّئ النموذج بنفسه</div>
+        </div>
+      </div>
+      <div class="branch-item">
+        <div class="node coral" style="max-width:100%" onclick="openDetail('r3b')">
+          <div class="node-title">استقطاب من جهات شريكة</div>
+          <div class="node-sub">أ. إبراهيم الجنيدلي — مراكز وحلق وجمعيات</div>
+        </div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('r4')">
+      <div class="node-title">استقبال البيانات ومراجعتها</div>
+      <div class="node-sub">أ. عبدالرحمن الجار الله — التحقق من الاكتمال</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('r5')">
+      <div class="node-title">استخلاص نتائج القياس القبلي</div>
+      <div class="node-sub">أ. عبدالرحمن — توثيق منفصل للمقارنة البعدية لاحقاً</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('r6')">
+      <div class="node-title">فرز الطلاب وتصنيفهم</div>
+      <div class="node-sub">أ. عبدالله شباط — حضوري (بريدة) / عن بعد (خارجها)</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray">
+      <div class="node-title">⬡ اكتمل 140 طالب؟</div>
+      <div class="node-sub">إذا لا — يستمر التسجيل مفتوحاً</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('r7')">
+      <div class="node-title">إغلاق التسجيل</div>
+      <div class="node-sub">أ. عبدالله شباط — بعد اكتمال العدد</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('r8')">
+      <div class="node-title">إرسال إشعار القبول</div>
+      <div class="node-sub">أ. عبدالرحمن — رسالة موحدة + إضافة للمجموعة المناسبة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('r9')">
+      <div class="node-title">إرسال تفاصيل الدورة والتذكيرات</div>
+      <div class="node-sub">أ. عبدالرحمن — جدول + رابط البث + رابط التحضير</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="end-node">الطالب جاهز للدورة ✓</div>
+  </div>
+
+  <!-- ===== مسار المحتوى ===== -->
+  <div id="section-content" class="flow section-hidden">
+    <div class="phase-label">تحليل الاحتياجات</div>
+
+    <div class="node teal" onclick="openDetail('c1')">
+      <div class="node-title">تحليل الاحتياجات ومراجعة النسخة السابقة</div>
+      <div class="node-sub">أ. عبدالله شباط — نقاط القوة والضعف في الدورة السابقة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('c2')">
+      <div class="node-title">إرسال استبيان الاحتياجات للطلاب</div>
+      <div class="node-sub">أ. عبدالرحمن الجار الله — جمع البيانات وتحليلها</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">بناء المحتوى</div>
+
+    <div class="node teal" onclick="openDetail('c3')">
+      <div class="node-title">تحديد هيكل اللقاءات</div>
+      <div class="node-sub">أ. عبدالله شباط — 6 فترات / 3 أيام / فترتان يومياً</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('c4')">
+      <div class="node-title">تحديد عناوين اللقاءات الست</div>
+      <div class="node-sub">أ. عبدالله شباط — بناءً على الاحتياجات المحللة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('c5')">
+      <div class="node-title">تحديد المحاور التفصيلية لكل عنوان</div>
+      <div class="node-sub">أ. عبدالله شباط — 3 إلى 5 محاور لكل لقاء</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('c6')">
+      <div class="node-title">اعتماد العناوين والمحاور من راعي المشروع</div>
+      <div class="node-sub">أ. عبدالله شباط + أ. محمود الزعبي — لا تواصل مع المحاضرين قبل هذه الخطوة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">تفريع</div>
+
+    <div class="branch">
+      <div class="branch-item">
+        <div class="node purple" style="max-width:100%" onclick="openDetail('c7a')">
+          <div class="node-title">إبلاغ المحاضرين بمحاورهم</div>
+          <div class="node-sub">أ. سلطان الجريش — بعد الاعتماد مباشرة</div>
+        </div>
+      </div>
+      <div class="branch-item">
+        <div class="node purple" style="max-width:100%" onclick="openDetail('c7b')">
+          <div class="node-title">إعداد أدوات القياس</div>
+          <div class="node-sub">أ. عبدالرحمن — 6 اختبارات بعدية</div>
+        </div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('c8')">
+      <div class="node-title">اعتماد المحتوى والأدوات كاملاً</div>
+      <div class="node-sub">أ. عبدالله شباط — جاهز للتنفيذ</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="end-node">المحتوى جاهز للتنفيذ ✓</div>
+  </div>
+
+  <!-- ===== مسار المحاضر ===== -->
+  <div id="section-lecturer" class="flow section-hidden">
+    <div class="phase-label">ما قبل الدورة</div>
+
+    <div class="node teal" onclick="openDetail('l1')">
+      <div class="node-title">إعداد قائمة المحاضرين المقترحين</div>
+      <div class="node-sub">أ. سلطان الجريش — محاضر أساسي + بديل لكل عنوان</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('l2')">
+      <div class="node-title">التواصل وتأكيد المشاركة</div>
+      <div class="node-sub">أ. سلطان الجريش — عرض العنوان والمحاور بعد الاعتماد</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('l3')">
+      <div class="node-title">إعداد العقود وتحديد المكافآت</div>
+      <div class="node-sub">أ. عبدالله المديفر + أ. عبدالله العودة — 2,000 ر.س لكل لقاء</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('l4')">
+      <div class="node-title">توزيع الجدول الزمني على المحاضرين</div>
+      <div class="node-sub">أ. سلطان الجريش — كل محاضر يعرف موعده ومحاوره فقط</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">قبل كل لقاء</div>
+
+    <div class="node teal" onclick="openDetail('l5')">
+      <div class="node-title">إرسال تذكير قبل اللقاء بيوم</div>
+      <div class="node-sub">أ. سلطان الجريش — تأكيد الموعد والمحاور</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray">
+      <div class="node-title">⬡ المحاضر متاح؟</div>
+      <div class="node-sub">إذا لا — يُفعَّل البديل فوراً</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('l6')">
+      <div class="node-title">استقبال المحاضر وتهيئته</div>
+      <div class="node-sub">أ. سلطان + أ. أبو بكر — 30 دقيقة قبل بدء اللقاء</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">أثناء اللقاء وبعده</div>
+
+    <div class="node purple" onclick="openDetail('l7')">
+      <div class="node-title">متابعة الالتزام بالمحاور والوقت</div>
+      <div class="node-sub">أ. سلطان الجريش — يرفع تقرير لمدير المشروع</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('l8')">
+      <div class="node-title">جمع تقييم الطلاب للمحاضر</div>
+      <div class="node-sub">أ. عبدالرحمن الجار الله — بعد كل لقاء</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('l9')">
+      <div class="node-title">إرسال التقييم للمحاضر</div>
+      <div class="node-sub">أ. سلطان الجريش — بعد انتهاء لقائه</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('l10')">
+      <div class="node-title">صرف المكافأة بعد تنفيذ اللقاء</div>
+      <div class="node-sub">أ. عبدالله العودة — المكافأة تُصرف بعد التنفيذ وليس قبله</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="end-node">المحاضر مكتمل ✓</div>
+  </div>
+
+  <!-- ===== مسار الإعلام ===== -->
+  <div id="section-media" class="flow section-hidden">
+    <div class="phase-label">ما قبل الدورة</div>
+
+    <div class="node coral" onclick="openDetail('m1')">
+      <div class="node-title">تصميم الهوية البصرية</div>
+      <div class="node-sub">أ. سلطان سراج — شعار + ألوان + قوالب</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('m2')">
+      <div class="node-title">اعتماد الهوية البصرية</div>
+      <div class="node-sub">أ. عبدالله شباط — قبل أي نشر</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node coral" onclick="openDetail('m3')">
+      <div class="node-title">إعداد المواد الإعلانية</div>
+      <div class="node-sub">أ. سلطان سراج — منشورات + بنرات + فيديو تعريفي</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('m4')">
+      <div class="node-title">اعتماد كل منشور قبل النشر</div>
+      <div class="node-sub">أ. عبدالله شباط — كل منشور على حدة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('m5')">
+      <div class="node-title">إطلاق حملة الإعلان عن الدورة</div>
+      <div class="node-sub">أ. عبدالرحمن التويجري — تويتر + واتساب + حالة واتساب</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">أثناء كل فترة</div>
+
+    <div class="node gray" onclick="openDetail('m6')">
+      <div class="node-title">تشغيل البث المباشر</div>
+      <div class="node-sub">أ. أبو بكر آدم — 10 دقائق قبل البدء + تسجيل للأرشفة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('m7')">
+      <div class="node-title">تصوير اللقاء والحضور والاختبار</div>
+      <div class="node-sub">أ. عبدالرحمن التويجري — صور + مقاطع توثيقية</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node coral" onclick="openDetail('m8')">
+      <div class="node-title">إعداد المحتوى اليومي</div>
+      <div class="node-sub">أ. سلطان سراج + أ. عبدالرحمن التويجري</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node teal" onclick="openDetail('m9')">
+      <div class="node-title">اعتماد المحتوى قبل النشر</div>
+      <div class="node-sub">أ. عبدالله شباط — كل منشور على حدة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('m10')">
+      <div class="node-title">النشر اليومي</div>
+      <div class="node-sub">تويتر + واتساب + حالة واتساب — بعد كل فترة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">ما بعد الدورة</div>
+
+    <div class="node purple" onclick="openDetail('m11')">
+      <div class="node-title">إعداد المقطع الختامي والألبوم التوثيقي</div>
+      <div class="node-sub">أ. عبدالرحمن + أ. سلطان سراج — أرشيف مرئي كامل</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="end-node">التغطية الإعلامية مكتملة ✓</div>
+  </div>
+
+  <!-- ===== مسار اللوجستيات ===== -->
+  <div id="section-logistics" class="flow section-hidden">
+    <div class="phase-label">ما قبل الدورة</div>
+
+    <div class="node gray" onclick="openDetail('lo1')">
+      <div class="node-title">تحديد متطلبات القاعة</div>
+      <div class="node-sub">أ. أبو بكر — طاولات، كراسي، نظافة، مكان المحاضر، إضاءة، موقع</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray" onclick="openDetail('lo2')">
+      <div class="node-title">تجهيز القاعة تقنياً</div>
+      <div class="node-sub">أ. أبو بكر — أجهزة عرض + صوتيات + إنترنت + إعداد البث</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray" onclick="openDetail('lo3')">
+      <div class="node-title">إعداد خطة الضيافة اليومية</div>
+      <div class="node-sub">أ. أبو بكر آدم — قائمة المستلزمات لكل فترة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gold dashed" onclick="openDetail('lo4')">
+      <div class="node-title">⚠️ احتمال — توفير مواصلات</div>
+      <div class="node-sub">أ. أبو بكر — للطلاب القادمين من الجهات الشريكة — يُحدد بقرار الإدارة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="phase-label">أثناء كل فترة</div>
+
+    <div class="node gray" onclick="openDetail('lo5')">
+      <div class="node-title">تجهيز القاعة قبل كل فترة</div>
+      <div class="node-sub">أ. أبو بكر — ترتيب + تقنيات + ضيافة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray" onclick="openDetail('lo6')">
+      <div class="node-title">تشغيل البث المباشر</div>
+      <div class="node-sub">أ. أبو بكر آدم — 10 دقائق قبل بدء كل فترة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray" onclick="openDetail('lo7')">
+      <div class="node-title">توزيع الأقلام والكراسات</div>
+      <div class="node-sub">أ. أبو بكر آدم — على الطلاب الحضوريين</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray" onclick="openDetail('lo8')">
+      <div class="node-title">الإشراف على الضيافة اليومية</div>
+      <div class="node-sub">أ. أبو بكر آدم — خلال كل فترة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node purple" onclick="openDetail('lo9')">
+      <div class="node-title">عرض باركود التحضير على الشاشة</div>
+      <div class="node-sub">أ. عبدالرحمن الجار الله — بعد انتهاء كل فترة</div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="node gray">
+      <div class="node-title">⬡ خلل تقني؟</div>
+      <div class="node-sub">أ. أبو بكر — معالجة فورية</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="end-node">اللوجستيات مكتملة ✓</div>
+  </div>
+
+</div><!-- end main -->
+
+<!-- Detail Panel -->
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-card">
+    <h3 id="detailTitle"></h3>
+    <ul class="detail-steps" id="detailSteps"></ul>
+    <button class="close-btn" onclick="closeDetail()">إغلاق</button>
+  </div>
+</div>
+
+<script>
+const details = {
+  // مسار الطالب
+  s1: { title: 'يصله رابط التسجيل', steps: [
+    { text: 'يصل الرابط عبر واتساب من إدارة المشاريع', who: 'أ. عبدالله شباط', out: 'رابط نموذج التسجيل' },
+    { text: 'أو عبر تويتر من قسم الإعلام', who: 'أ. عبدالرحمن التويجري', out: 'منشور تويتر' },
+    { text: 'أو عبر الجهة الشريكة التي رشّحته', who: 'أ. إبراهيم الجنيدلي', out: 'توجيه مباشر' },
+  ]},
+  s2: { title: 'يعبّئ نموذج التسجيل', steps: [
+    { text: 'يدخل بياناته الشخصية (الاسم، رقم الجوال، المنطقة)', who: 'الطالب', out: '' },
+    { text: 'يجيب على أسئلة القياس القبلي المضمّنة في النموذج', who: 'الطالب', out: 'بيانات + قياس قبلي' },
+    { text: 'يحدد طريقة الحضور: حضوري أم عن بعد', who: 'الطالب', out: 'تصنيف مبدئي' },
+  ]},
+  s3: { title: 'يصله إشعار القبول', steps: [
+    { text: 'يصله رسالة موحدة عبر واتساب تفيد بقبوله', who: 'أ. عبدالرحمن الجار الله', out: 'إشعار قبول' },
+    { text: 'يُضاف للمجموعة المناسبة (حضوري أو عن بعد)', who: 'أ. عبدالرحمن الجار الله', out: 'عضوية في المجموعة' },
+  ]},
+  s4: { title: 'يصله جدول الدورة ورابط البث', steps: [
+    { text: 'يصله جدول الفترات الست مع مواعيدها', who: 'أ. عبدالرحمن الجار الله', out: 'جدول زمني' },
+    { text: 'يصله رابط البث المباشر (لطلاب عن بعد)', who: 'أ. عبدالرحمن الجار الله', out: 'رابط البث' },
+  ]},
+  s5: { title: 'يصله رابط التحضير', steps: [
+    { text: 'الطالب الحضوري: يمسح باركود معروض على الشاشة بعد انتهاء الفترة', who: 'أ. أبو بكر (يعرض) + أ. عبدالرحمن (يُعد)', out: '' },
+    { text: 'الطالب عن بعد: يصله رابط في مجموعة واتساب', who: 'أ. عبدالرحمن الجار الله', out: 'رابط نموذج جوجل' },
+  ]},
+  s6: { title: 'يسجّل حضوره', steps: [
+    { text: 'يضغط على الرابط أو يمسح الباركود ويسجّل اسمه', who: 'الطالب', out: 'سجل حضور إلكتروني' },
+    { text: 'يجب التسجيل خلال 15 دقيقة من انتهاء الفترة', who: 'الطالب', out: '' },
+    { text: 'من لم يسجّل في الوقت المحدد يُعدّ غائباً', who: '', out: '' },
+  ]},
+  s7: { title: 'يجيب على الاختبار البعدي', steps: [
+    { text: 'الطالب الحضوري: يستلم نموذجاً ورقياً ويجيب عليه', who: 'أ. عبدالرحمن يوزع + أ. التويجري يصوّر', out: 'نموذج ورقي' },
+    { text: 'الطالب عن بعد: يصله رابط نموذج جوجل في القروب', who: 'أ. عبدالرحمن الجار الله', out: 'استجابة إلكترونية' },
+    { text: 'الاختبار غير مشترط للشهادة — لأغراض التوثيق والتطوير', who: '', out: '' },
+  ]},
+  s8: { title: 'يجيب على استبيان الرضا', steps: [
+    { text: 'يصله رابط الاستبيان في مجموعة واتساب بعد آخر فترة', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'الاستبيان اختياري ولا يؤثر على الشهادة', who: '', out: '' },
+    { text: 'يُذكَّر مرة واحدة بعد 24 ساعة', who: 'أ. عبدالرحمن الجار الله', out: 'نتائج رضا' },
+  ]},
+  s9: { title: 'يصله شهادة الحضور', steps: [
+    { text: 'تُستخرج قائمة مستحقي الشهادة من سجل الحضور', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'تُولَّد الشهادة إلكترونياً باسمه الكامل', who: 'أ. عبدالرحمن الجار الله', out: 'شهادة PDF' },
+    { text: 'تُرسل له عبر واتساب', who: 'أ. عبدالرحمن الجار الله', out: 'شهادة مستلَمة ✓' },
+    { text: 'شرط الاستحقاق: حضر 4 فترات أو أكثر — أو حضر 4 + استأذن مرة', who: '', out: '' },
+  ]},
+
+  // مسار التسجيل
+  r1: { title: 'إعداد نموذج التسجيل', steps: [
+    { text: 'تصميم النموذج الإلكتروني وتحديد حقوله', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'تضمين أسئلة القياس القبلي في نفس النموذج', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'إعداد رابط النموذج وتجربته', who: 'أ. عبدالله شباط', out: 'رابط جاهز' },
+  ]},
+  r2: { title: 'نشر رابط التسجيل', steps: [
+    { text: 'إرسال الرابط عبر واتساب من إدارة المشاريع', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'نشره على تويتر عبر قسم الإعلام', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'إرساله لأ. إبراهيم لتوزيعه على الجهات الشريكة', who: 'أ. عبدالله شباط', out: 'رابط موزَّع' },
+  ]},
+  r3a: { title: 'تسجيل مباشر', steps: [
+    { text: 'الطالب يجد الرابط ويعبّئ النموذج بنفسه', who: 'الطالب', out: 'استجابة في النموذج' },
+  ]},
+  r3b: { title: 'استقطاب من جهات شريكة', steps: [
+    { text: 'إعداد قائمة بالجهات المستهدفة', who: 'أ. إبراهيم الجنيدلي', out: '' },
+    { text: 'التواصل معها وتقديم الدورة', who: 'أ. إبراهيم الجنيدلي', out: '' },
+    { text: 'إرسال رابط التسجيل للجهات لتوزيعه', who: 'أ. إبراهيم الجنيدلي', out: 'مرشحون يسجلون' },
+  ]},
+  r4: { title: 'استقبال البيانات ومراجعتها', steps: [
+    { text: 'استقبال البيانات من النموذج الإلكتروني', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'التحقق من اكتمال البيانات والتواصل مع من بياناتهم ناقصة', who: 'أ. عبدالرحمن الجار الله', out: 'بيانات مكتملة' },
+  ]},
+  r5: { title: 'استخلاص القياس القبلي', steps: [
+    { text: 'استخراج إجابات القياس القبلي من بيانات النموذج', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'توثيقها في سجل منفصل للمقارنة بالقياس البعدي', who: 'أ. عبدالرحمن الجار الله', out: 'سجل القياس القبلي' },
+  ]},
+  r6: { title: 'فرز الطلاب وتصنيفهم', steps: [
+    { text: 'مراجعة موقع كل طالب الجغرافي', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'تصنيف: حضوري (بريدة وما حولها) أو عن بعد (خارجها)', who: 'أ. عبدالله شباط', out: 'قائمتان منفصلتان' },
+    { text: 'مراجعة القوائم والتأكد من صحتها واعتمادها', who: 'أ. عبدالله شباط', out: 'قوائم معتمدة ✓' },
+  ]},
+  r7: { title: 'إغلاق التسجيل', steps: [
+    { text: 'متابعة عدد المسجلين حتى اكتمال 140 طالب', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'إغلاق النموذج الإلكتروني', who: 'أ. عبدالله شباط', out: 'نموذج مغلق' },
+  ]},
+  r8: { title: 'إرسال إشعار القبول', steps: [
+    { text: 'إرسال رسالة موحدة لكل طالب مقبول عبر واتساب', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'إضافة الطالب لمجموعة الحضوريين أو عن بعد', who: 'أ. عبدالرحمن الجار الله', out: 'طالب في المجموعة' },
+  ]},
+  r9: { title: 'إرسال تفاصيل الدورة', steps: [
+    { text: 'إرسال جدول الفترات الست مع مواعيدها', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'إرسال رابط البث لطلاب عن بعد', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'شرح آلية التحضير والاختبارات', who: 'أ. عبدالرحمن الجار الله', out: 'طالب جاهز ✓' },
+  ]},
+
+  // مسار المحتوى
+  c1: { title: 'تحليل الاحتياجات', steps: [
+    { text: 'مراجعة نتائج الدورة التأهيلية السابقة', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'تحديد نقاط القوة للإبقاء عليها ونقاط الضعف للتحسين', who: 'أ. عبدالله شباط', out: 'ملاحظات مرجعية' },
+  ]},
+  c2: { title: 'استبيان الاحتياجات', steps: [
+    { text: 'إعداد الاستبيان وإرساله للطلاب الجدد', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'جمع البيانات وتحليل النتائج', who: 'أ. عبدالرحمن الجار الله', out: 'تقرير احتياجات' },
+  ]},
+  c3: { title: 'تحديد هيكل اللقاءات', steps: [
+    { text: 'تحديد عدد اللقاءات: 6 فترات', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'توزيعها: 3 أيام — فترتان يومياً (عصر-مغرب + مغرب-عشاء)', who: 'أ. عبدالله شباط', out: 'هيكل زمني' },
+    { text: 'اعتماد الهيكل من راعي المشروع', who: 'أ. محمود الزعبي', out: 'هيكل معتمد ✓' },
+  ]},
+  c4: { title: 'تحديد العناوين', steps: [
+    { text: 'اقتراح عنوان لكل فترة من الفترات الست', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'مراعاة الاحتياجات المحللة وأهداف الدورة', who: 'أ. عبدالله شباط', out: 'قائمة عناوين' },
+  ]},
+  c5: { title: 'تحديد المحاور التفصيلية', steps: [
+    { text: 'تحديد 3 إلى 5 محاور تفصيلية لكل عنوان', who: 'أ. عبدالله شباط', out: 'خريطة محتوى مفصّلة' },
+  ]},
+  c6: { title: 'اعتماد العناوين والمحاور', steps: [
+    { text: 'عرض العناوين والمحاور على راعي المشروع', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'التعديل بناءً على الملاحظات', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'الاعتماد الرسمي — لا يُتواصل مع المحاضرين قبل هذه الخطوة', who: 'أ. محمود الزعبي', out: 'محتوى معتمد ✓' },
+  ]},
+  c7a: { title: 'إبلاغ المحاضرين', steps: [
+    { text: 'إبلاغ كل محاضر بعنوانه ومحاوره بعد الاعتماد مباشرة', who: 'أ. سلطان الجريش', out: 'محاضرون مطّلعون' },
+  ]},
+  c7b: { title: 'إعداد أدوات القياس', steps: [
+    { text: 'إعداد 6 اختبارات بعدية — اختبار لكل فترة', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'مراجعة الأسئلة مع مدير المشروع', who: 'أ. عبدالله شباط', out: 'اختبارات معتمدة ✓' },
+  ]},
+  c8: { title: 'اعتماد المحتوى كاملاً', steps: [
+    { text: 'التأكد من جاهزية جميع المحتوى والأدوات', who: 'أ. عبدالله شباط', out: 'المحتوى جاهز ✓' },
+  ]},
+
+  // مسار المحاضر
+  l1: { title: 'إعداد قائمة المحاضرين', steps: [
+    { text: 'الانتظار حتى اعتماد العناوين والمحاور رسمياً', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'تحديد محاضر مناسب لكل عنوان بناءً على تخصصه', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'تحديد بديل لكل محاضر مسبقاً', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'عرض القائمة على مدير المشروع واعتمادها', who: 'أ. عبدالله شباط', out: 'قائمة معتمدة ✓' },
+  ]},
+  l2: { title: 'التواصل وتأكيد المشاركة', steps: [
+    { text: 'التواصل مع كل محاضر وعرض عنوانه ومحاوره', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'الحصول على تأكيد المشاركة', who: 'أ. سلطان الجريش', out: 'قائمة موافقات' },
+  ]},
+  l3: { title: 'إعداد العقود والمكافآت', steps: [
+    { text: 'إعداد عقود المحاضرين', who: 'أ. عبدالله المديفر', out: '' },
+    { text: 'تحديد المكافأة: 2,000 ر.س لكل لقاء', who: 'أ. عبدالله العودة', out: 'عقود موقعة' },
+  ]},
+  l4: { title: 'توزيع الجدول الزمني', steps: [
+    { text: 'إرسال الجدول لكل محاضر مع موعده فقط', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'كل محاضر يعرف عنوانه ومحاوره وموعده — لا يرى الجدول الكامل', who: '', out: 'جدول موزَّع' },
+  ]},
+  l5: { title: 'تذكير قبل اللقاء بيوم', steps: [
+    { text: 'إرسال رسالة تذكير للمحاضر تتضمن الموعد والمحاور', who: 'أ. سلطان الجريش', out: 'تأكيد الحضور' },
+  ]},
+  l6: { title: 'استقبال وتهيئة المحاضر', steps: [
+    { text: 'استقبال المحاضر قبل 30 دقيقة من بدء اللقاء', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'تهيئة المكان والأجهزة له', who: 'أ. أبو بكر آدم', out: 'محاضر جاهز' },
+  ]},
+  l7: { title: 'متابعة الالتزام بالمحاور', steps: [
+    { text: 'متابعة التزام المحاضر بالمحاور المعتمدة أثناء اللقاء', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'رفع تقرير لمدير المشروع بعد كل لقاء', who: 'أ. سلطان الجريش', out: 'تقرير الالتزام' },
+  ]},
+  l8: { title: 'تقييم الطلاب للمحاضر', steps: [
+    { text: 'إرسال رابط تقييم المحاضر في القروب بعد كل لقاء', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'جمع النتائج وتجميعها', who: 'أ. عبدالرحمن الجار الله', out: 'نتائج تقييم' },
+  ]},
+  l9: { title: 'إرسال التقييم للمحاضر', steps: [
+    { text: 'إرسال نتائج تقييم الطلاب للمحاضر بعد انتهاء لقائه', who: 'أ. سلطان الجريش', out: 'محاضر مُقيَّم' },
+  ]},
+  l10: { title: 'صرف المكافأة', steps: [
+    { text: 'التحقق من تنفيذ اللقاء', who: 'أ. سلطان الجريش', out: '' },
+    { text: 'صرف 2,000 ر.س بعد التنفيذ وليس قبله', who: 'أ. عبدالله العودة', out: 'صرف مالي موثَّق ✓' },
+  ]},
+
+  // مسار الإعلام
+  m1: { title: 'تصميم الهوية البصرية', steps: [
+    { text: 'تصميم شعار الدورة', who: 'أ. سلطان سراج', out: '' },
+    { text: 'تحديد ألوان وخطوط وقوالب الدورة', who: 'أ. سلطان سراج', out: 'هوية بصرية كاملة' },
+  ]},
+  m2: { title: 'اعتماد الهوية البصرية', steps: [
+    { text: 'عرض الهوية على مدير المشروع للاعتماد', who: 'أ. عبدالله شباط', out: 'هوية معتمدة ✓' },
+  ]},
+  m3: { title: 'إعداد المواد الإعلانية', steps: [
+    { text: 'تصميم منشورات الإعلان عن الدورة', who: 'أ. سلطان سراج', out: '' },
+    { text: 'إعداد بنرات وفيديو تعريفي', who: 'أ. سلطان سراج', out: '' },
+    { text: 'إعداد قوالب المحتوى اليومي', who: 'أ. سلطان سراج', out: 'مواد جاهزة' },
+  ]},
+  m4: { title: 'اعتماد كل منشور', steps: [
+    { text: 'عرض كل منشور على مدير المشروع قبل نشره', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'الاعتماد يكون لكل منشور على حدة', who: 'أ. عبدالله شباط', out: 'منشور معتمد ✓' },
+  ]},
+  m5: { title: 'إطلاق حملة الإعلان', steps: [
+    { text: 'نشر المواد الإعلانية على تويتر', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'نشرها في مجموعات واتساب', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'تحديث حالة واتساب', who: 'أ. عبدالرحمن التويجري', out: 'حملة مطلَقة' },
+  ]},
+  m6: { title: 'تشغيل البث المباشر', steps: [
+    { text: 'إعداد الأجهزة قبل 10 دقائق من بدء الفترة', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'تشغيل البث المباشر على المنصة المعتمدة', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'تسجيل الفترة كاملة للأرشفة', who: 'أ. أبو بكر آدم', out: 'بث نشط + تسجيل' },
+  ]},
+  m7: { title: 'تصوير اللقاء', steps: [
+    { text: 'تصوير المحاضر والحضور أثناء اللقاء', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'تصوير الطلاب أثناء الاختبار البعدي', who: 'أ. عبدالرحمن التويجري', out: 'صور توثيقية' },
+  ]},
+  m8: { title: 'إعداد المحتوى اليومي', steps: [
+    { text: 'تحرير مقطع قصير من أبرز لحظات الفترة', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'تصميم منشورات يومية', who: 'أ. سلطان سراج', out: 'محتوى جاهز' },
+  ]},
+  m9: { title: 'اعتماد المحتوى اليومي', steps: [
+    { text: 'عرض كل منشور يومي على مدير المشروع', who: 'أ. عبدالله شباط', out: 'منشور معتمد ✓' },
+  ]},
+  m10: { title: 'النشر اليومي', steps: [
+    { text: 'نشر على تويتر', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'نشر في مجموعة واتساب', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'تحديث حالة واتساب', who: 'أ. عبدالرحمن التويجري', out: 'محتوى منشور' },
+  ]},
+  m11: { title: 'التوثيق الختامي', steps: [
+    { text: 'تجميع جميع الصور والمقاطع في ألبوم توثيقي', who: 'أ. عبدالرحمن التويجري', out: '' },
+    { text: 'أرشفة تسجيلات الفترات الست', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'إعداد مقطع ختامي ونشره', who: 'أ. عبدالرحمن التويجري', out: 'أرشيف مرئي كامل ✓' },
+  ]},
+
+  // مسار اللوجستيات
+  lo1: { title: 'تحديد متطلبات القاعة', steps: [
+    { text: 'تحديد عدد الطاولات والكراسي المطلوبة', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'التأكد من نظافة المكان وتهيئته', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'تجهيز مكان مناسب للمحاضر (منصة، ميكروفون، شاشة)', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'التحقق من الإضاءة الكافية والموقع المناسب', who: 'أ. أبو بكر آدم', out: 'قائمة متطلبات' },
+  ]},
+  lo2: { title: 'تجهيز القاعة تقنياً', steps: [
+    { text: 'تركيب وتجربة أجهزة العرض والشاشات', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'إعداد الصوتيات والميكروفونات', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'تأمين اتصال إنترنت مستقر للبث', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'اختبار إعداد البث المباشر', who: 'أ. أبو بكر آدم', out: 'قاعة جاهزة تقنياً ✓' },
+  ]},
+  lo3: { title: 'خطة الضيافة اليومية', steps: [
+    { text: 'تحديد مستلزمات الضيافة لكل فترة', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'إعداد قائمة الشراء والتوريد', who: 'أ. أبو بكر آدم', out: 'خطة ضيافة جاهزة' },
+  ]},
+  lo4: { title: 'توفير مواصلات (احتمال)', steps: [
+    { text: 'هذا القرار لم يُحسم بعد — يُحدد بقرار الإدارة', who: 'أ. عبدالله شباط', out: '' },
+    { text: 'إذا قُرِّر: تحديد نقاط التجمع والمواعيد', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'التنسيق مع أ. إبراهيم الجنيدلي لمعرفة أعداد الطلاب المحتاجين', who: 'أ. أبو بكر آدم', out: 'خطة مواصلات' },
+  ]},
+  lo5: { title: 'تجهيز القاعة قبل كل فترة', steps: [
+    { text: 'ترتيب الطاولات والكراسي', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'تشغيل الأجهزة التقنية والتأكد من عملها', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'تجهيز الضيافة', who: 'أ. أبو بكر آدم', out: 'قاعة جاهزة' },
+  ]},
+  lo6: { title: 'تشغيل البث المباشر', steps: [
+    { text: 'تشغيل البث قبل 10 دقائق من بدء الفترة', who: 'أ. أبو بكر آدم', out: '' },
+    { text: 'التأكد من وضوح الصورة والصوت', who: 'أ. أبو بكر آدم', out: 'بث نشط' },
+  ]},
+  lo7: { title: 'توزيع الأقلام والكراسات', steps: [
+    { text: 'توزيع الأقلام والكراسات على الطلاب الحضوريين', who: 'أ. أبو بكر آدم', out: 'مستلزمات موزَّعة' },
+  ]},
+  lo8: { title: 'الإشراف على الضيافة', steps: [
+    { text: 'الإشراف على توزيع الضيافة خلال الفترة', who: 'أ. أبو بكر آدم', out: 'ضيافة منفَّذة' },
+  ]},
+  lo9: { title: 'عرض باركود التحضير', steps: [
+    { text: 'بعد انتهاء الفترة: عرض الباركود على الشاشة', who: 'أ. عبدالرحمن الجار الله', out: '' },
+    { text: 'إبقاؤه ظاهراً لمدة 15 دقيقة للتسجيل', who: 'أ. عبدالرحمن الجار الله', out: 'تحضير مكتمل' },
+  ]},
+};
+
+function showSection(id) {
+  document.querySelectorAll('[id^="section-"]').forEach(s => s.classList.add('section-hidden'));
+  document.getElementById('section-' + id).classList.remove('section-hidden');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function openDetail(key) {
+  const d = details[key];
+  if (!d) return;
+  document.getElementById('detailTitle').textContent = d.title;
+  const ul = document.getElementById('detailSteps');
+  ul.innerHTML = d.steps.map((s, i) => `
+    <li>
+      <div class="step-num">${i+1}</div>
+      <div class="step-content">
+        <div>${s.text}</div>
+        ${s.who ? `<div class="step-who">👤 ${s.who}</div>` : ''}
+        ${s.out ? `<div class="step-out">📋 المخرج: ${s.out}</div>` : ''}
+      </div>
+    </li>
+  `).join('');
+  document.getElementById('detailPanel').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+}
+
+document.getElementById('detailPanel').addEventListener('click', function(e) {
+  if (e.target === this) closeDetail();
+});
+</script>
+</body>
+</html>
